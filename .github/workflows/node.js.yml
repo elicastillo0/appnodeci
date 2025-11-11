@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -13,11 +13,12 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -30,7 +31,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -39,10 +41,14 @@ jobs:
           git config --global user.email "elialtea929@gmail.com"
           git config --global user.name "Elí Castillo"
 
-      - name: Force push to Heroku
+      - name: Authenticate and deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
+          echo "machine git.heroku.com login heroku password ${HEROKU_API_KEY}" > ~/.netrc
+          git init
           git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/eli-castillo-app.git
-          git pull origin main --rebase
+          git add .
+          git commit -m "Deploy from GitHub Actions"
           git push heroku main --force
+

@@ -41,16 +41,9 @@ jobs:
           git config --global user.email "elialtea929@gmail.com"
           git config --global user.name "Elí Castillo"
 
-      - name: Authenticate and deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          set -e
-          echo "machine api.heroku.com login heroku password ${HEROKU_API_KEY}" > ~/.netrc
-          echo "machine git.heroku.com login heroku password ${HEROKU_API_KEY}" >> ~/.netrc
-          git remote | grep heroku && git remote remove heroku || echo "No remote to remove"
-          git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/eli-castillo-app.git
-          echo "Fetching latest from Heroku..."
-          git fetch heroku || echo "No remote history yet"
-          echo "Pushing to Heroku..."
-          git push heroku main --force
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "eli-castillo-app"
+          heroku_email: "elialtea929@gmail.com"

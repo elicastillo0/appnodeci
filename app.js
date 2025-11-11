@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Activando workflow tras regenerar dependencias.
+// Activando workflow tras regenerar dependencias..
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

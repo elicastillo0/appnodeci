@@ -45,10 +45,12 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-          echo "machine git.heroku.com login heroku password ${HEROKU_API_KEY}" > ~/.netrc
-          git init
+          set -e
+          echo "machine api.heroku.com login heroku password ${HEROKU_API_KEY}" > ~/.netrc
+          echo "machine git.heroku.com login heroku password ${HEROKU_API_KEY}" >> ~/.netrc
+          git remote | grep heroku && git remote remove heroku || echo "No remote to remove"
           git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/eli-castillo-app.git
-          git add .
-          git commit -m "Deploy from GitHub Actions"
+          echo "Fetching latest from Heroku..."
+          git fetch heroku || echo "No remote history yet"
+          echo "Pushing to Heroku..."
           git push heroku main --force
-

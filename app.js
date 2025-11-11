@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
     })
 })
 
-// Test commit para activar GitHub Actions y validar despliegue
+// Activando workflow tras regenerar dependencias
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 })

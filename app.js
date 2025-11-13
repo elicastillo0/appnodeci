@@ -1,11 +1,9 @@
+// app.js
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('🚀 ¡Deploy exitoso en Heroku con GitHub Actions!');
+  res.json({ message: '🚀 ¡Deploy exitoso en Heroku con GitHub Actions!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+module.exports = app;

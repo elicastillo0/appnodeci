@@ -12,26 +12,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js
         uses: actions/setup-node@v2
-      - with:
+        with:
           node-version: "16.x"
+
       - name: Install dependencies
         run: npm install
+
       - name: Run test
         run: npm test
-      - name: Check Job Status and fail if they are
-red
-        if: env.WORKFLOW_CONCLUSION == 'failure'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: akhileshns/heroku-deploy@3.12.12 # This is the action
-          with:
-            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-            heroku_app_name: "<eli-castillo-app>"
-            heroku_email: "<elialtea929@gmail.com>"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: akhileshns/heroku-deploy@3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "eli-castillo-app"
+          heroku_email: "elialtea929@gmail.com"
